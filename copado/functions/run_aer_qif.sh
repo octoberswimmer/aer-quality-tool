@@ -3,9 +3,54 @@ set -euo pipefail
 
 copado -p "reading parameters"
 
-originBranch=$(jq -r '.originBranch // empty' <<<"${branchesAndFileIdJson:-{}}")
+json_or_empty() {
+    local value="${1:-}"
+    if [[ -z "${value}" ]]; then
+        echo "{}"
+        return
+    fi
+
+    if jq -e . >/dev/null 2>&1 <<<"${value}"; then
+        echo "${value}"
+        return
+    fi
+
+    # Some contexts pass JSON as an escaped string; parse if possible.
+    if jq -e -R 'fromjson? | (type == "object" or type == "array")' >/dev/null 2>&1 <<<"${value}"; then
+        jq -c -R 'fromjson' <<<"${value}"
+        return
+    fi
+
+    echo "{}"
+}
+
+job_json=$(json_or_empty "${jobExecutionDataJson:-}")
+branches_json=$(json_or_empty "${branchesAndFileIdJson:-}")
+
+if [[ "${branches_json}" == "{}" && -n "${branchesAndFileIdJson:-}" ]]; then
+    copado -p "invalid branchesAndFileIdJson; using fallbacks"
+fi
+
+originBranch=$(jq -r '
+  .originBranch
+  // .sourceBranch
+  // .sourceBranchName
+  // .branchName
+  // empty
+' <<<"${branches_json}" 2>/dev/null || true)
+
 if [[ -z "${originBranch}" ]]; then
-    echo "origin branch is missing in branchesAndFileIdJson" >&2
+    originBranch=$(jq -r '
+      .originBranch
+      // .sourceBranch
+      // .sourceBranchName
+      // .branchName
+      // empty
+    ' <<<"${job_json}" 2>/dev/null || true)
+fi
+
+if [[ -z "${originBranch}" ]]; then
+    copado -p "missing origin branch" -e "originBranch not found in branchesAndFileIdJson or jobExecutionDataJson"
     exit 1
 fi
 
@@ -18,12 +63,28 @@ elif [[ "${originBranch}" =~ ^feature/.* ]] && [[ -n "${baseBranch:-}" ]] && [[ 
     destinationBranch="${baseBranch}"
     echo "feature context detected; using baseBranch"
 else
-    destinationBranch=$(jq -r '.destinationBranch // empty' <<<"${branchesAndFileIdJson:-{}}")
-    if [[ -z "${destinationBranch}" ]]; then
-        echo "destination branch is missing in branchesAndFileIdJson" >&2
-        exit 1
+    destinationBranch=$(jq -r '.destinationBranch // empty' <<<"${branches_json}" 2>/dev/null || true)
+    if [[ -n "${destinationBranch}" ]]; then
+        echo "fallback context; using destinationBranch from branchesAndFileIdJson"
     fi
-    echo "fallback context; using destinationBranch from branchesAndFileIdJson"
+fi
+
+if [[ -z "${destinationBranch:-}" ]]; then
+    destinationBranch=$(jq -r '
+      .destinationBranch
+      // .destinationBranchName
+      // .targetBranch
+      // .baseBranch
+      // empty
+    ' <<<"${job_json}" 2>/dev/null || true)
+    if [[ -n "${destinationBranch}" ]]; then
+        echo "fallback context; using destination branch from jobExecutionDataJson"
+    fi
+fi
+
+if [[ -z "${destinationBranch:-}" ]]; then
+    copado -p "missing destination branch" -e "destinationBranch not found in branchesAndFileIdJson or jobExecutionDataJson"
+    exit 1
 fi
 
 echo "param destinationBranch = ${destinationBranch}"
@@ -31,21 +92,6 @@ echo "param destinationBranch = ${destinationBranch}"
 copado -p "cloning repository"
 copado-git-get "${destinationBranch}"
 copado-git-get "${originBranch}"
-
-json_or_empty() {
-    local value="${1:-}"
-    if [[ -z "${value}" ]]; then
-        echo "{}"
-        return
-    fi
-    if jq -e . >/dev/null 2>&1 <<<"${value}"; then
-        echo "${value}"
-    else
-        echo "{}"
-    fi
-}
-
-job_json=$(json_or_empty "${jobExecutionDataJson:-}")
 
 config_json=$(jq -c '
   def parse(v):

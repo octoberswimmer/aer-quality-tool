@@ -53,14 +53,20 @@ The configuration is stored as json in `copado__AcceptanceCriteria__c` and follo
 
 ## container image
 
-Build and publish the function image:
+Default image:
+
+```text
+copado-function-core:v1
+```
+
+Optional custom image workflow:
 
 ```bash
 docker build -t ghcr.io/octoberswimmer/aer-copado-quality-tool:<tag> -f copado/images/Dockerfile .
 docker push ghcr.io/octoberswimmer/aer-copado-quality-tool:<tag>
 ```
 
-Then set `copado__Image_Name__c` in `force-app/main/default/staticresources/aer_extension_bundle.json` to that image.
+If you use a custom image, set `copado__Image_Name__c` in `force-app/main/default/staticresources/aer_extension_bundle.json` to that image.
 
 ## troubleshooting
 
