@@ -71,7 +71,7 @@ config_flags=$(jq -r '.flags // empty' <<<"${config_json}" 2>/dev/null || true)
 config_default_ns=$(jq -r '.[\"default-namespace\"] // .defaultNamespace // empty' <<<"${config_json}" 2>/dev/null || true)
 config_version=$(jq -r '.version // empty' <<<"${config_json}" 2>/dev/null || true)
 
-source_value="${source:-${config_source:-.}}"
+source_value="${source:-${config_source:-force-app}}"
 flags_value="${flags:-${config_flags:-}}"
 default_ns_value="${defaultNamespace:-${config_default_ns:-}}"
 version_value="${version:-${config_version:-latest}}"

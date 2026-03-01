@@ -1,7 +1,7 @@
 import { LightningElement, api } from 'lwc';
 
 const DEFAULT_CONFIG = Object.freeze({
-    source: '.',
+    source: 'force-app',
     flags: '',
     'default-namespace': '',
     version: 'latest'

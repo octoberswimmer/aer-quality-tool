@@ -44,7 +44,7 @@ The configuration is stored as json in `copado__AcceptanceCriteria__c` and follo
 
 ```json
 {
-  "source": ".",
+  "source": "force-app",
   "flags": "",
   "default-namespace": "",
   "version": "latest"
@@ -56,8 +56,8 @@ The configuration is stored as json in `copado__AcceptanceCriteria__c` and follo
 Build and publish the function image:
 
 ```bash
-docker build -t <registry>/aer-function:<tag> -f copado/images/Dockerfile .
-docker push <registry>/aer-function:<tag>
+docker build -t ghcr.io/octoberswimmer/aer-copado-quality-tool:<tag> -f copado/images/Dockerfile .
+docker push ghcr.io/octoberswimmer/aer-copado-quality-tool:<tag>
 ```
 
 Then set `copado__Image_Name__c` in `force-app/main/default/staticresources/aer_extension_bundle.json` to that image.

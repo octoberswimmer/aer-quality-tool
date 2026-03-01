@@ -16,7 +16,7 @@ describe('c-aer-configuration', () => {
 
         expect(element.getValue()).toBe(
             JSON.stringify({
-                source: '.',
+                source: 'force-app',
                 flags: '',
                 'default-namespace': '',
                 version: 'latest'
