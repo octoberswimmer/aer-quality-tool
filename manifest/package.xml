@@ -2,27 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>*</members>
-        <name>ApexClass</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
+        <name>CustomMetadata</name>
     </types>
     <types>
         <members>*</members>
@@ -32,5 +12,5 @@
         <members>*</members>
         <name>StaticResource</name>
     </types>
-    <version>54.0</version>
+    <version>64.0</version>
 </Package>

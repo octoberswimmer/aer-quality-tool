@@ -1,14 +1,69 @@
-# MC Mock Extension
+# aer quality tool for copado
 
-### 1. What is this for?
+This repository packages a Copado quality tool that runs `aer test` inside Copado infrastructure.
 
-The purpose is to provide a sample skeleton for building quality tools.
+## what this package includes
 
-### 2. Setup
-- a) Make sure your user has the following permission sets assigned: Copado User. Copado Job Engine, Quality Gate
-- b) Make sure your user has the Copado Admin license.
-- c) Push the code and components in this repository to your Org.
-- d) Create the picklist value "MC Mock Tool" in ExtensionConfiguration__c.ExtensionTool__c picklist, and also in "Copado Test Tool" global picklist value set. The first will be needed as the Extension Configuration is packaged with the value already set.
-- e) Go to Copado Extension Tab, select MockMCExtensionBundle from dropdown. 
-- f) Click on Generate extension records
-- e) You're ready to test this tool! You can create a test record manually, Quality Gate rules, extension configuration, etc.
+- a Copado function (`run_aer_qif`) that downloads and runs `aer`
+- a Copado job template + function step to execute `aer test`
+- a static resource bundle (`aer_extension_bundle`) for "Generate Extension Records"
+- custom metadata for:
+  - test tool registration (`aer`)
+  - ui sections using `c:aerConfiguration`
+  - default quality gate actions:
+    - after commit (block)
+    - after promotion (report)
+- a configurable lwc with options aligned to the github action inputs:
+  - `source`
+  - `flags`
+  - `default-namespace`
+  - `version`
+
+## prerequisites
+
+- Copado user permissions for quality gates and functions
+- Copado packages compatible with function-based quality tools
+- an image published from `copado/images/Dockerfile`
+
+## setup
+
+1. deploy this metadata to your org.
+2. add picklist values:
+   - `Extension Configuration > Extension Tool`: `aer`
+   - `Copado Test Tool` global value set: `aer`
+3. open **Copado Extensions**, select `aer_extension_bundle`, click **Generate Extension Records**.
+4. open **Functions** and verify the generated function `run aer qif`.
+5. update the function image name in generated records if needed.
+6. create quality gates using the packaged defaults:
+   - after commit (block)
+   - after promotion (report)
+
+## configuration
+
+The configuration is stored as json in `copado__AcceptanceCriteria__c` and follows:
+
+```json
+{
+  "source": ".",
+  "flags": "",
+  "default-namespace": "",
+  "version": "latest"
+}
+```
+
+## container image
+
+Build and publish the function image:
+
+```bash
+docker build -t <registry>/aer-function:<tag> -f copado/images/Dockerfile .
+docker push <registry>/aer-function:<tag>
+```
+
+Then set `copado__Image_Name__c` in `force-app/main/default/staticresources/aer_extension_bundle.json` to that image.
+
+## troubleshooting
+
+- `source cannot be empty`: set a non-empty `source` value.
+- version resolution/download failures: verify network access from Copado worker to github releases.
+- function fails before running `aer`: verify image includes `bash`, `curl`, `jq`, `git`, and `unzip`.

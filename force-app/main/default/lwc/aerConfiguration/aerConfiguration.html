@@ -1,0 +1,45 @@
+<template>
+    <lightning-card title="aer test settings">
+        <div class="slds-p-around_medium">
+            <lightning-input
+                label="source"
+                value={sourceValue}
+                data-field="source"
+                required
+                disabled={readOnly}
+                onchange={handleInputChange}
+            ></lightning-input>
+
+            <lightning-input
+                class="slds-m-top_small"
+                label="flags"
+                value={flagsValue}
+                data-field="flags"
+                disabled={readOnly}
+                onchange={handleInputChange}
+            ></lightning-input>
+
+            <lightning-input
+                class="slds-m-top_small"
+                label="default namespace"
+                value={defaultNamespaceValue}
+                data-field="default-namespace"
+                disabled={readOnly}
+                onchange={handleInputChange}
+            ></lightning-input>
+
+            <lightning-input
+                class="slds-m-top_small"
+                label="version"
+                value={versionValue}
+                data-field="version"
+                disabled={readOnly}
+                onchange={handleInputChange}
+            ></lightning-input>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error slds-m-top_small">{errorMessage}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
