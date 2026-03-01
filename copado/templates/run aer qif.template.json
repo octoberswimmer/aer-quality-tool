@@ -1,6 +1,6 @@
 {
   "name": "run aer qif",
-  "apiname": "run_aer_qif_1",
+  "apiname": "run_aer_qif",
   "type": "Custom",
   "description": "run aer tests in copado quality gate",
   "version": 1,
@@ -22,32 +22,8 @@
             "value": "{$Context.Apex.copadoQuality.RetrieveBranchesAndFileIdForPmdScan}"
           },
           {
-            "name": "targetBranch",
-            "value": "{$Context.JobExecution__r.DataJson.destinationBranchName}"
-          },
-          {
-            "name": "baseBranch",
-            "value": "{$Context.JobExecution__r.DataJson.baseBranch}"
-          },
-          {
             "name": "jobExecutionDataJson",
-            "value": "{$Context.JobExecution__r.DataJson}"
-          },
-          {
-            "name": "source",
-            "value": "{$Context.JobExecution__r.DataJson.source}"
-          },
-          {
-            "name": "flags",
-            "value": "{$Context.JobExecution__r.DataJson.flags}"
-          },
-          {
-            "name": "defaultNamespace",
-            "value": "{$Context.JobExecution__r.DataJson.defaultNamespace}"
-          },
-          {
-            "name": "version",
-            "value": "{$Context.JobExecution__r.DataJson.version}"
+            "value": "{$Context.JobExecution__r.copado__DataJson__c}"
           }
         ]
       }

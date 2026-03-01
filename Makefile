@@ -86,5 +86,5 @@ docker-publish: check-image
 			image_tag="v0.1.0"; \
 		fi; \
 	fi; \
-	echo "Publishing $(IMAGE):$$image_tag"; \
-	docker push "$(IMAGE):$$image_tag"
+	echo "Building and publishing $(IMAGE):$$image_tag for $(PLATFORM)"; \
+	docker buildx build --platform "$(PLATFORM)" --push -f "$(DOCKERFILE)" -t "$(IMAGE):$$image_tag" .

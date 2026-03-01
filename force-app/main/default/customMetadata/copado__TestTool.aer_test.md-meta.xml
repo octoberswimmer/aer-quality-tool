@@ -8,7 +8,7 @@
     </values>
     <values>
         <field>copado__JobTemplate__c</field>
-        <value xsi:type="xsd:string">run_aer_qif_1</value>
+        <value xsi:type="xsd:string">run_aer_qif</value>
     </values>
     <values>
         <field>copado__TestType__c</field>
