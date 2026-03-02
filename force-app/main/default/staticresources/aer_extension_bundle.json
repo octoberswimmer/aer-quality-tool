@@ -49,6 +49,7 @@
           "copado__IsSkipped__c": false,
           "copado__JobTemplate__c": "a0u000000000001AAA",
           "copado__Order__c": 1,
+          "copado__Result_Viewer_Component__c": "c:aerResultViewerPanel",
           "copado__Type__c": "Function",
           "Id": "a0t000000000001AAA",
           "Name": "run aer test"

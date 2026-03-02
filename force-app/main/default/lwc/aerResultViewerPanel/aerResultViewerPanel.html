@@ -1,0 +1,94 @@
+<template>
+    <lightning-card title="aer Test Summary" icon-name="utility:table">
+        <div class="slds-p-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading results" size="small"></lightning-spinner>
+            </template>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error slds-m-bottom_small">{errorMessage}</div>
+            </template>
+
+            <template if:false={isLoading}>
+                <div class="slds-m-bottom_medium">
+                    <span class={statusClass}>{statusBadge}</span>
+                    <span class="slds-m-left_small status-detail">{summary.statusDetail}</span>
+                </div>
+
+                <lightning-accordion allow-multiple-sections-open>
+                    <lightning-accordion-section name="summary" label="Test Summary">
+                        <lightning-datatable
+                            key-field="key"
+                            data={summaryRows}
+                            columns={summaryColumns}
+                            hide-checkbox-column>
+                        </lightning-datatable>
+                    </lightning-accordion-section>
+
+                    <template if:true={hasCoverage}>
+                        <lightning-accordion-section name="coverage" label="Coverage Overview">
+                            <template if:true={coverageBarText}>
+                                <pre class="coverage-bar">{coverageBarText}</pre>
+                            </template>
+                            <template if:true={hasCoverageRows}>
+                                <lightning-datatable
+                                    key-field="key"
+                                    data={coverageRows}
+                                    columns={coverageColumns}
+                                    hide-checkbox-column>
+                                </lightning-datatable>
+                            </template>
+                        </lightning-accordion-section>
+                    </template>
+
+                    <template if:true={hasFailures}>
+                        <lightning-accordion-section name="failures" label="Failed Tests">
+                            <lightning-datatable
+                                key-field="key"
+                                data={failingRows}
+                                columns={failedColumns}
+                                hide-checkbox-column>
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                    </template>
+
+                    <template if:true={hasSlowestTests}>
+                        <lightning-accordion-section name="performance" label="Test Performance (Top 10 Slowest)">
+                            <lightning-datatable
+                                key-field="key"
+                                data={slowestRows}
+                                columns={testColumns}
+                                hide-checkbox-column>
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                    </template>
+
+                    <template if:true={hasAllTests}>
+                        <lightning-accordion-section name="alltests" label="All Tests">
+                            <template if:true={allTestsFootnote}>
+                                <div class="slds-text-body_small slds-m-bottom_x-small">{allTestsFootnote}</div>
+                            </template>
+                            <lightning-datatable
+                                key-field="key"
+                                data={allRows}
+                                columns={testColumns}
+                                hide-checkbox-column>
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                    </template>
+
+                    <template if:true={hasFiles}>
+                        <lightning-accordion-section name="files" label="Attached Files">
+                            <lightning-datatable
+                                key-field="key"
+                                data={fileRows}
+                                columns={fileColumns}
+                                hide-checkbox-column>
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                    </template>
+                </lightning-accordion>
+            </template>
+        </div>
+    </lightning-card>
+</template>

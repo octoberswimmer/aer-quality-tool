@@ -18,6 +18,11 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
   - `flags`
   - `default-namespace`
   - `version`
+- an LWC-based custom result viewer (`c:aerResultViewerPanel`) that reads:
+  - `aer-test-results.xml` (junit)
+  - `aer-coverage.json`
+  - `aer-results-summary.json`
+  and renders a detailed test/coverage summary on the Copado Result record.
 
 ## prerequisites
 
@@ -37,6 +42,8 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
 6. create quality gates using the packaged defaults:
    - after commit (block)
    - after promotion (report)
+7. run a test execution and open the generated **Result** record:
+   - the custom viewer renders status, test counts, duration, coverage, failures, and attached artifacts.
 
 ## configuration
 

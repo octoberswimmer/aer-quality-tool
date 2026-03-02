@@ -1,0 +1,38 @@
+.status-pill {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    font-weight: 700;
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
+
+.status-pass {
+    background: #d9f7e8;
+    color: #056a45;
+}
+
+.status-fail {
+    background: #ffe3e3;
+    color: #a10000;
+}
+
+.status-neutral {
+    background: #ecebea;
+    color: #3e3e3c;
+}
+
+.status-detail {
+    color: #3e3e3c;
+}
+
+.coverage-bar {
+    background: #f8f8f8;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin: 0 0 0.75rem;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 0.75rem;
+}
