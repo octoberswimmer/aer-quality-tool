@@ -46,7 +46,7 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
 
 ## configuration
 
-The configuration is stored as json in `copado__AcceptanceCriteria__c` and follows:
+The configuration is managed in the Copado Extension Configuration settings UI and passed to the function as JSON:
 
 ```json
 {
