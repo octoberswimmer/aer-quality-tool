@@ -43,7 +43,7 @@
             "type": "copado__JobStep__c",
             "url": "/services/data/v64.0/sobjects/copado__JobStep__c/a0t000000000001AAA"
           },
-          "copado__ApiName__c": "run_aer_qif_run_aer_test_1",
+          "copado__ApiName__c": "run_aer_qif_run_aer_test",
           "copado__ConfigJson__c": "{\"functionName\":\"run_aer_qif\",\"parameters\":[{\"name\":\"git_json\",\"value\":\"{$Context.Repository.Credential}\"},{\"name\":\"branchesAndFileIdJson\",\"value\":\"{$Context.Apex.copadoQuality.RetrieveBranchesAndFileIdForPmdScan}\"},{\"name\":\"jobExecutionDataJson\",\"value\":\"{$Context.JobExecution__r.copado__DataJson__c}\"}]}",
           "copado__CustomType__c": "Function",
           "copado__IsSkipped__c": false,

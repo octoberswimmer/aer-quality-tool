@@ -6,7 +6,7 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
 
 - a Copado function (`run_aer_qif`) that downloads and runs `aer`
 - a Copado job template + function step to execute `aer test`
-- a static resource bundle (`aer_extension_bundle`) for "Generate Extension Records"
+- a static resource bundle (`aer`) for "Generate Extension Records"
 - custom metadata for:
   - test tool registration (`aer`)
   - ui sections using `c:aerConfiguration`
@@ -35,7 +35,7 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
 2. add picklist values:
    - `Extension Configuration > Extension Tool`: `aer`
    - `Copado Test Tool` global value set: `aer`
-3. open **Copado Extensions**, select `aer_extension_bundle`, click **Generate Extension Records**.
+3. open **Copado Extensions**, select `aer`, click **Generate Extension Records**.
 4. open **Functions** and verify the generated function `run aer qif`.
 5. verify `copado__Image_Name__c` is set to `copado-function-core:v1`.
 6. create quality gates using the packaged defaults:
