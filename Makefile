@@ -1,8 +1,12 @@
 SHELL := /bin/bash
 
 SEMVER_TAG_PATTERN ?= v[0-9]*.[0-9]*.[0-9]*
+AER_JSON := force-app/main/default/staticresources/aer.json
+FUNCTION_SCRIPT := copado/functions/run_aer_qif.sh
 
-.PHONY: print-next-tag tag
+.PHONY: print-next-tag tag sync-function deploy
+
+all: sync-function deploy
 
 print-next-tag:
 	@latest=$$(git tag --list '$(SEMVER_TAG_PATTERN)' --sort=-v:refname | head -n1); \
@@ -35,3 +39,12 @@ tag:
 	fi; \
 	git tag -a "$$next_tag" -m "release $$next_tag"; \
 	echo "Created tag $$next_tag"
+
+sync-function:
+	@jq --rawfile script $(FUNCTION_SCRIPT) \
+		'(.RecordSetBundles[] | select(.ObjectType == "copado__Function__c") | .Records[0].copado__Script__c) = $$script' \
+		$(AER_JSON) > $(AER_JSON).tmp && mv $(AER_JSON).tmp $(AER_JSON)
+	@echo "Updated $(AER_JSON) with $(FUNCTION_SCRIPT)"
+
+deploy:
+	sf deploy metadata --manifest manifest/package.xml

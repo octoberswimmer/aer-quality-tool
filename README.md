@@ -57,6 +57,18 @@ The configuration is managed in the Copado Extension Configuration settings UI a
 }
 ```
 
+## license key
+
+To use a licensed version of `aer`, create a System Property to store the license key:
+
+1. navigate to **System Properties** and click **New**.
+2. set **API Name** to `AER_LICENSE_KEY`.
+3. paste your license key in the **Value** field.
+4. check **Hide Value** to protect the key.
+5. optionally link the property to specific **Pipeline** or **Environment** records.
+
+the function includes a parameter that reads `{$Global.Property.AER_LICENSE_KEY}` and exports it as `AER_LICENSE_KEY` to the shell environment.
+
 ## runtime image
 
 The packaged function uses:

@@ -235,6 +235,12 @@ fi
 echo "resolved aer version: ${resolved_version}"
 install_aer "${release_repo}" "${resolved_version}"
 
+if [[ -n "${aerLicenseKey:-}" ]]; then
+    export AER_LICENSE_KEY="${aerLicenseKey}"
+fi
+
+aer license show
+
 paths=()
 while IFS= read -r line; do
     line=$(sed 's/^[[:space:]]*//;s/[[:space:]]*$//' <<<"${line}")
