@@ -1,10 +1,10 @@
-# aer quality tool for copado
+# aer quality tool for Copado
 
 This repository packages a Copado quality tool that runs `aer test` inside Copado infrastructure.
 
-## what this package includes
+## What this package includes
 
-- a Copado function (`run_aer_qif`) that downloads and runs `aer`
+- a Copado function (`run_aer_qif`) that downloads and runs [`aer`](https://github.com/octoberswimmer/aer-dist/)
 - a Copado job template + function step to execute `aer test`
 - a static resource bundle (`aer`) for "Generate Extension Records"
 - custom metadata for:
@@ -13,7 +13,7 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
   - default quality gate actions:
     - after commit (block)
     - after promotion (report)
-- a configurable lwc with options aligned to the github action inputs:
+- a configurable LWC with options to configure the `aer test` execution:
   - `source`
   - `flags`
   - `default-namespace`
@@ -24,12 +24,12 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
   - `aer-results-summary.json`
   and renders a detailed test/coverage summary on the Copado Result record.
 
-## prerequisites
+## Prerequisites
 
 - Copado user permissions for quality gates and functions
 - Copado packages compatible with function-based quality tools
 
-## setup
+## Setup
 
 1. deploy this metadata to your org.
 2. add picklist values:
@@ -57,7 +57,10 @@ The configuration is managed in the Copado Extension Configuration settings UI a
 }
 ```
 
-## license key
+## License Key
+
+An `aer` license key is required to run more than 100 tests at a time.  Visit
+https://www.octoberswimmer.com/tools/aer/subscribe/ to purchase a license.
 
 To use a licensed version of `aer`, create a System Property to store the license key:
 
@@ -67,9 +70,9 @@ To use a licensed version of `aer`, create a System Property to store the licens
 4. check **Hide Value** to protect the key.
 5. optionally link the property to specific **Pipeline** or **Environment** records.
 
-the function includes a parameter that reads `{$Global.Property.AER_LICENSE_KEY}` and exports it as `AER_LICENSE_KEY` to the shell environment.
+The function includes a parameter that reads `{$Global.Property.AER_LICENSE_KEY}` and exports it as `AER_LICENSE_KEY` to the shell environment.
 
-## runtime image
+## Runtime image
 
 The packaged function uses:
 
@@ -77,7 +80,7 @@ The packaged function uses:
 copado-function-core:v1
 ```
 
-## troubleshooting
+## Troubleshooting
 
 - `source cannot be empty`: set a non-empty `source` value.
-- version resolution/download failures: verify network access from Copado worker to github releases.
+- version resolution/download failures: verify network access from Copado worker to GitHub releases.
