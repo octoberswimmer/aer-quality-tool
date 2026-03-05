@@ -2,9 +2,9 @@ SHELL := /bin/bash
 
 SEMVER_TAG_PATTERN ?= v[0-9]*.[0-9]*.[0-9]*
 AER_JSON := force-app/main/default/staticresources/aer.json
-FUNCTION_SCRIPT := copado/functions/run_aer_qif.sh
+FUNCTION_SCRIPT := copado/functions/aer.sh
 
-.PHONY: print-next-tag tag sync-function deploy
+.PHONY: print-next-tag tag sync-function deploy validate prepack
 
 all: sync-function deploy
 
@@ -48,3 +48,9 @@ sync-function:
 
 deploy:
 	sf deploy metadata --manifest manifest/package.xml
+
+validate:
+	sf copado:beta:extension:validate
+
+prepack:
+	sf copado:beta:extension:prepack

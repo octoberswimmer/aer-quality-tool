@@ -1,6 +1,6 @@
 {
-  "name": "run aer qif",
-  "apiname": "run_aer_qif",
+  "name": "aer",
+  "apiname": "aer",
   "type": "Custom",
   "description": "run aer tests in copado quality gate",
   "version": 1,
@@ -11,7 +11,7 @@
       "type": "Function",
       "customtype": "Function",
       "config": {
-        "functionName": "run_aer_qif",
+        "functionName": "aer",
         "parameters": [
           {
             "name": "git_json",

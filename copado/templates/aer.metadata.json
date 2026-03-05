@@ -1,0 +1,5 @@
+{
+	"apiName": "aer",
+	"description": "run aer tests in copado quality gate",
+	"type": "Custom"
+}

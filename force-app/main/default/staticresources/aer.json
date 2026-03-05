@@ -6,16 +6,16 @@
         {
           "attributes": {
             "type": "copado__ExtensionConfiguration__c",
-            "url": "/services/data/v64.0/sobjects/copado__ExtensionConfiguration__c/a0f000000000001AAA"
+            "url": "/services/data/v66.0/sobjects/copado__ExtensionConfiguration__c/a0ffn000001DqWTAA0"
           },
+          "Id": "a0ffn000001DqWTAA0",
+          "Name": "aer config",
           "copado__AcceptanceCriteria__c": "{\"source\":\"force-app\",\"flags\":\"\",\"default-namespace\":\"\",\"version\":\"latest\"}",
           "copado__Active__c": true,
           "copado__ExtensionApplication__c": "Test",
+          "copado__Details__c": null,
           "copado__ExtensionTool__c": "aer",
-          "copado__Status__c": "Inactive",
-          "copado__TestType__c": "aer test",
-          "Id": "a0f000000000001AAA",
-          "Name": "aer config"
+          "copado__TestType__c": "aer test"
         }
       ],
       "ObjectType": "copado__ExtensionConfiguration__c"
@@ -25,13 +25,13 @@
         {
           "attributes": {
             "type": "copado__JobTemplate__c",
-            "url": "/services/data/v64.0/sobjects/copado__JobTemplate__c/a0u000000000001AAA"
+            "url": "/services/data/v66.0/sobjects/copado__JobTemplate__c/a0u000000000001AAA"
           },
-          "copado__ApiName__c": "run_aer_qif",
+          "copado__ApiName__c": "aer",
           "copado__Type__c": "Custom",
           "copado__Version__c": 1,
           "Id": "a0u000000000001AAA",
-          "Name": "run aer qif"
+          "Name": "aer"
         }
       ],
       "ObjectType": "copado__JobTemplate__c"
@@ -41,10 +41,10 @@
         {
           "attributes": {
             "type": "copado__JobStep__c",
-            "url": "/services/data/v64.0/sobjects/copado__JobStep__c/a0t000000000001AAA"
+            "url": "/services/data/v66.0/sobjects/copado__JobStep__c/a0t000000000001AAA"
           },
-          "copado__ApiName__c": "run_aer_qif_run_aer_test",
-          "copado__ConfigJson__c": "{\"functionName\":\"run_aer_qif\",\"parameters\":[{\"name\":\"git_json\",\"value\":\"{$Context.Repository.Credential}\"},{\"name\":\"branchesAndFileIdJson\",\"value\":\"{$Context.Apex.copadoQuality.RetrieveBranchesAndFileIdForPmdScan}\"},{\"name\":\"jobExecutionDataJson\",\"value\":\"{$Context.JobExecution__r.copado__DataJson__c}\"},{\"name\":\"aerLicenseKey\",\"value\":\"{$Global.Property.AER_LICENSE_KEY}\"}]}",
+          "copado__ApiName__c": "aer_run_aer_test",
+          "copado__ConfigJson__c": "{\"functionName\":\"aer\",\"parameters\":[{\"name\":\"git_json\",\"value\":\"{$Context.Repository.Credential}\"},{\"name\":\"branchesAndFileIdJson\",\"value\":\"{$Context.Apex.copadoQuality.RetrieveBranchesAndFileIdForPmdScan}\"},{\"name\":\"jobExecutionDataJson\",\"value\":\"{$Context.JobExecution__r.copado__DataJson__c}\"},{\"name\":\"aerLicenseKey\",\"value\":\"{$Global.Property.AER_LICENSE_KEY}\"}]}",
           "copado__CustomType__c": "Function",
           "copado__IsSkipped__c": false,
           "copado__JobTemplate__c": "a0u000000000001AAA",
@@ -62,9 +62,9 @@
         {
           "attributes": {
             "type": "copado__Function__c",
-            "url": "/services/data/v64.0/sobjects/copado__Function__c/a0l000000000001AAA"
+            "url": "/services/data/v66.0/sobjects/copado__Function__c/a0l000000000001AAA"
           },
-          "copado__API_Name__c": "run_aer_qif",
+          "copado__API_Name__c": "aer",
           "copado__Description__c": "run aer test for copado quality gates",
           "copado__Image_Name__c": "copado-function-core:v1",
           "copado__Options__c": "[ ]",
@@ -74,7 +74,7 @@
           "copado__Version__c": "7",
           "copado__Worker_Size__c": "S",
           "Id": "a0l000000000001AAA",
-          "Name": "run aer qif"
+          "Name": "aer"
         }
       ],
       "ObjectType": "copado__Function__c"
