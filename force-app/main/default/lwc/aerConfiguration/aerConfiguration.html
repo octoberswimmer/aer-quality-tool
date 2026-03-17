@@ -1,45 +1,112 @@
 <template>
-    <lightning-card title="aer test settings">
-        <div class="slds-p-around_medium">
+  <lightning-card title="aer Test Runner Settings">
+    <div class="slds-p-around_medium">
+      <template for:each={sourceValues} for:item="source">
+        <div key={source.id} class="slds-grid slds-gutters slds-m-top_small">
+          <div class="slds-col">
             <lightning-input
-                label="source"
-                value={sourceValue}
-                data-field="source"
-                required
-                disabled={readOnly}
-                onchange={handleInputChange}
+              label="Source Directory"
+              field-level-help="the directory within your git repo containing the application code and metadata"
+              value={source.value}
+              data-index={source.index}
+              required
+              disabled={readOnly}
+              onchange={handleSourceChange}
             ></lightning-input>
-
-            <lightning-input
-                class="slds-m-top_small"
-                label="flags"
-                value={flagsValue}
-                data-field="flags"
-                disabled={readOnly}
-                onchange={handleInputChange}
-            ></lightning-input>
-
-            <lightning-input
-                class="slds-m-top_small"
-                label="default namespace"
-                value={defaultNamespaceValue}
-                data-field="default-namespace"
-                disabled={readOnly}
-                onchange={handleInputChange}
-            ></lightning-input>
-
-            <lightning-input
-                class="slds-m-top_small"
-                label="version"
-                value={versionValue}
-                data-field="version"
-                disabled={readOnly}
-                onchange={handleInputChange}
-            ></lightning-input>
-
-            <template if:true={errorMessage}>
-                <div class="slds-text-color_error slds-m-top_small">{errorMessage}</div>
-            </template>
+          </div>
+          <div class="slds-col slds-grow-none slds-align-bottom">
+            <lightning-button-icon
+              icon-name="utility:close"
+              alternative-text="Remove Source Directory"
+              title="Remove Source Directory"
+              data-index={source.index}
+              disabled={readOnly}
+              if:true={source.canRemove}
+              onclick={handleRemoveSource}
+            ></lightning-button-icon>
+          </div>
         </div>
-    </lightning-card>
+      </template>
+
+      <div class="slds-m-top_small">
+        <lightning-button
+          label="Add Source Directory"
+          onclick={handleAddSource}
+          disabled={readOnly}
+        ></lightning-button>
+      </div>
+
+      <lightning-input
+        class="slds-m-top_small"
+        label="Default Namespace"
+        field-level-help="Treat code and metadata within source directories as if they are part of this namespace"
+        value={defaultNamespaceValue}
+        data-field="defaultNamespace"
+        disabled={readOnly}
+        onchange={handleInputChange}
+      ></lightning-input>
+
+      <lightning-input
+        class="slds-m-top_small"
+        label="Additional Flags"
+        field-level-help="Any additional flags to pass to `aer test`."
+        value={flagsValue}
+        data-field="flags"
+        disabled={readOnly}
+        onchange={handleInputChange}
+      ></lightning-input>
+
+      <div class="slds-m-top_x-small">
+        <lightning-formatted-url
+          value="https://www.octoberswimmer.com/tools/aer/docs/aer_test/"
+          label="aer test Documentation"
+          target="_blank"
+        ></lightning-formatted-url>
+      </div>
+
+      <lightning-input
+        class="slds-m-top_small"
+        label="aer Version"
+        field-level-help="Default: latest"
+        value={versionValue}
+        data-field="version"
+        disabled={readOnly}
+        onchange={handleInputChange}
+      ></lightning-input>
+
+      <div class="slds-m-top_x-small">
+        <lightning-formatted-url
+          value="https://github.com/octoberswimmer/aer-dist/releases/"
+          label="View All Versions"
+          target="_blank"
+        ></lightning-formatted-url>
+      </div>
+
+      <div class="slds-m-top_medium">
+        <div class="slds-text-title_caps">Command Preview</div>
+        <div class="slds-box slds-theme_default slds-m-top_x-small">
+          <pre>{commandPreview}</pre>
+        </div>
+      </div>
+
+      <div class="slds-m-top_medium">
+        <lightning-button
+          label="Save"
+          variant="brand"
+          disabled={saveDisabled}
+          onclick={handleSaveClick}
+        ></lightning-button>
+      </div>
+
+      <template if:true={statusMessage}>
+        <div class="slds-text-color_success slds-m-top_small">
+          {statusMessage}
+        </div>
+      </template>
+
+      <template if:true={errorMessage}>
+        <div class="slds-text-color_error slds-m-top_small">{errorMessage}</div>
+      </template>
+    </div>
+  </lightning-card>
 </template>

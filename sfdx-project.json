@@ -2,11 +2,21 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "aer for Copado",
+      "versionDescription": "",
+      "dependencies": [
+        {
+          "package": "04tKA000000D34QYAS"
+        }
+      ]
     }
   ],
-  "name": "aer quality tool",
+  "name": "aer for Copado",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "64.0"
+  "sourceApiVersion": "64.0",
+  "packageAliases": {
+    "aer for Copado": "0HoRp00000031PNKAY"
+  }
 }

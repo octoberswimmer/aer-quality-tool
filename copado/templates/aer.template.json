@@ -24,6 +24,10 @@
           {
             "name": "jobExecutionDataJson",
             "value": "{$Context.JobExecution__r.copado__DataJson__c}"
+          },
+          {
+            "name": "aerConfigJson",
+            "value": "{$Context.Apex.AerConfigExpression}"
           }
         ]
       }

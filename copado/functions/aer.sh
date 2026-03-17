@@ -24,8 +24,52 @@ json_or_empty() {
     echo "{}"
 }
 
+preview_config_json() {
+    local value="${1:-{}}"
+    jq -c '
+      def normalize_source:
+        if . == null then []
+        elif type == "array" then map(tostring)
+        elif type == "string" and . != "" then [.]
+        else []
+        end;
+
+      if type == "object" then
+        {
+          source: ((.source // .paths // null) | normalize_source),
+          flags: (.flags // ""),
+          defaultNamespace: (.defaultNamespace // ""),
+          version: (.version // "")
+        }
+      else
+        { type: type }
+      end
+    ' <<<"${value}" 2>/dev/null || echo '{"parseError":true}'
+}
+
+log_config_input() {
+    local name="${1}"
+    local raw_value="${2:-}"
+    local parsed_value="${3:-{}}"
+
+    if [[ -z "${raw_value}" ]]; then
+        echo "config input ${name}: raw=missing parsed={}"
+        return
+    fi
+
+    echo "config input ${name}: raw=present parsed=$(preview_config_json "${parsed_value}")"
+}
+
 job_json=$(json_or_empty "${jobExecutionDataJson:-}")
 branches_json=$(json_or_empty "${branchesAndFileIdJson:-}")
+aer_config_json=$(json_or_empty "${aerConfigJson:-}")
+test_config_json=$(json_or_empty "${testConfigJson:-}")
+extension_config_json=$(json_or_empty "${extensionConfigJson:-}")
+
+log_config_input "aerConfigJson" "${aerConfigJson:-}" "${aer_config_json}"
+log_config_input "testConfigJson" "${testConfigJson:-}" "${test_config_json}"
+log_config_input "extensionConfigJson" "${extensionConfigJson:-}" "${extension_config_json}"
+echo "config input jobExecutionDataJson.aerConfig=$(jq -c '.aerConfig // {}' <<<"${job_json}" 2>/dev/null || echo '{}')"
 
 if [[ "${branches_json}" == "{}" && -n "${branchesAndFileIdJson:-}" ]]; then
     copado -p "invalid branchesAndFileIdJson; using fallbacks"
@@ -93,7 +137,7 @@ copado -p "cloning repository"
 copado-git-get "${destinationBranch}"
 copado-git-get "${originBranch}"
 
-config_json=$(jq -c '
+job_config_json=$(jq -c '
   def parse(v):
     if (v|type) == "string" then
       (v | fromjson? // empty)
@@ -104,6 +148,26 @@ config_json=$(jq -c '
     end;
 
   parse(.aerConfig)
+  // parse(.details)
+  // parse(.detailsJson)
+  // parse(.settings)
+  // parse(.settingsJson)
+  // parse(.configuration)
+  // parse(.configurationJson)
+  // parse(.["copado__Configuration__c"])
+  // parse(.extensionConfigurationDetails)
+  // parse(.extensionConfigurationSettings)
+  // parse(.extensionConfiguration.details)
+  // parse(.extensionConfiguration.settings)
+  // parse(.test.configuration)
+  // parse(.test.configurationJson)
+  // parse(.test.["copado__Configuration__c"])
+  // parse(.testRecord.configuration)
+  // parse(.testRecord.configurationJson)
+  // parse(.testRecord.["copado__Configuration__c"])
+  // parse(.testDefinition.configuration)
+  // parse(.testDefinition.configurationJson)
+  // parse(.testDefinition.["copado__Configuration__c"])
   // parse(.acceptanceCriteria)
   // parse(.acceptanceCriteriaJson)
   // parse(.extensionConfigurationAcceptanceCriteria)
@@ -112,9 +176,37 @@ config_json=$(jq -c '
   // {}
 ' <<<"${job_json}" 2>/dev/null || echo "{}")
 
-config_source=$(jq -r '.source // .paths // empty' <<<"${config_json}" 2>/dev/null || true)
+echo "config input resolvedFromJobExecutionDataJson=$(preview_config_json "${job_config_json}")"
+
+config_json=$(jq -c -n \
+  --argjson direct "${aer_config_json}" \
+  --argjson extension "${extension_config_json}" \
+  --argjson job "${job_config_json}" \
+  --argjson test "${test_config_json}" \
+  '
+    def object_or_empty(value):
+      if (value | type) == "object" then value else {} end;
+
+    object_or_empty($extension)
+    * object_or_empty($job)
+    * object_or_empty($test)
+    * object_or_empty($direct)
+  ' 2>/dev/null || echo "{}")
+
+config_source=$(jq -r '
+  def stringify_paths:
+    if type == "array" then
+      map(tostring) | join("\n")
+    elif type == "string" then
+      .
+    else
+      empty
+    end;
+
+  (.source // .paths // empty) | stringify_paths
+' <<<"${config_json}" 2>/dev/null || true)
 config_flags=$(jq -r '.flags // empty' <<<"${config_json}" 2>/dev/null || true)
-config_default_ns=$(jq -r '.[\"default-namespace\"] // .defaultNamespace // empty' <<<"${config_json}" 2>/dev/null || true)
+config_default_ns=$(jq -r '.defaultNamespace // empty' <<<"${config_json}" 2>/dev/null || true)
 config_version=$(jq -r '.version // empty' <<<"${config_json}" 2>/dev/null || true)
 
 source_value="${source:-${config_source:-force-app}}"
@@ -132,6 +224,8 @@ fi
 if [[ -z "${version_value}" ]]; then
     version_value="latest"
 fi
+
+echo "resolved config: source=${source_value} defaultNamespace=${default_ns_value:-<empty>} version=${version_value}"
 
 resolve_latest_version() {
     local repo="$1"
@@ -287,7 +381,7 @@ cat > ./aer-results-summary.json <<JSON
   "version": "${resolved_version}",
   "source": "${source_value}",
   "flags": "${flags_value}",
-  "default-namespace": "${default_ns_value}",
+  "defaultNamespace": "${default_ns_value}",
   "exitCode": ${exit_code}
 }
 JSON

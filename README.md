@@ -22,7 +22,7 @@ This repository packages a Copado quality tool that runs `aer test` inside Copad
   - `aer-test-results.xml` (junit)
   - `aer-coverage.json`
   - `aer-results-summary.json`
-  and renders a detailed test/coverage summary on the Copado Result record.
+    and renders a detailed test/coverage summary on the Copado Result record.
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ The configuration is managed in the Copado Extension Configuration settings UI a
 
 ## License Key
 
-An `aer` license key is required to run more than 100 tests at a time.  Visit
+An `aer` license key is required to run more than 100 tests at a time. Visit
 https://www.octoberswimmer.com/tools/aer/subscribe/ to purchase a license.
 
 To use a licensed version of `aer`, create a System Property to store the license key:

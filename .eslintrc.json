@@ -1,0 +1,15 @@
+{
+  "extends": ["@salesforce/eslint-config-lwc/recommended"],
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.js"],
+      "rules": {
+        "@lwc/lwc/no-async-operation": "off",
+        "@lwc/lwc/no-unexpected-wire-adapter-usages": "off"
+      },
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}
